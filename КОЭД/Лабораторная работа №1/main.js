@@ -3,7 +3,7 @@ const btn = document.getElementById('go')
 btn.onclick = onClickHandler
 
 function returnResult(response) {
-    document.getElementById('result').innerHTML = response
+    document.getElementById('result').innerHTML += `\n` + response
 }
 
 function getMiddle(row) {
@@ -21,6 +21,8 @@ function getDisp(row, mid) {
 }
 
 function onClickHandler() {
+        document.getElementById('result').innerHTML = ''
+
         const inp = document.getElementById('matrix')
         const M = JSON.parse(inp.value)
 
@@ -79,7 +81,7 @@ function onClickHandler() {
                 const stud = Tmap[(N - 1).toString()]
                 t[i][j] = stat
                 if(stat > stud && i !== j) {
-                    console.log(`Найдена корреляция между столбцами №${i} и №${j}, превышение табличного коэффициента на ${(((stat/stud) * 100) - 100).toFixed(2)}%`)
+                    returnResult(`Найдена корреляция между столбцами №${i} и №${j}, превышение табличного коэффициента на ${(((stat/stud) * 100) - 100).toFixed(2)}%`)
                 }
             }
         }

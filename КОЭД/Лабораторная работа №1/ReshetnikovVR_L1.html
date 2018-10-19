@@ -5,13 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>КОЭД ЛР1 ПРО412сз Решетников В.Р.</title>
+    <style>
+        textarea, button {
+            width: 100%;
+        }
+        button {
+            height: 150px;
+        }
+    </style>
 </head>
 <body>
     <div>Введите исходную матрицу в формате JSON</div>
     <div>[[с,т,о,л,б,е,ц,1],[с,т,о,л,б,е,ц,2]]</div>>
-    <textarea id='matrix'>[[2,4,6],[4,8,12],[512,256,128]]</textarea>
+    <textarea rows="10" id='matrix'>[[2,4,6],[4,8,12],[512,256,128]]</textarea>
     <br><button id='go'>Расчет</button>
     <script src="main.js"></script>
-    <br><textarea id='result'></textarea>
+    <br><textarea rows="10" id='result'></textarea>
 </body>
 </html>
