@@ -45,8 +45,15 @@ function findElem(A, ak) {
         }
     }
     //console.log('Finded', result)
+    if(result) {
+        console.log(`P: ${result.p}, Q: ${result.q}`)
+    } else {
+        console.log(`Генерируем новую преграду!`)
+    }
     return result
 }
+
+const prettify = M => M.map(row => row.map(elem => elem.toFixed(3)))
 
 function onClickHandler() {
     document.getElementById('result').innerHTML = ''
@@ -55,8 +62,9 @@ function onClickHandler() {
 
     // Заданная матрица
     var A = JSON.parse(inp.value)
-    console.log(inp.value)
-    console.log('Исходная матрица ', A)
+    const start = A
+    //console.log(inp.value)
+    console.log('Исходная матрица ', prettify(start))
 
     // Размерность матрицы
     const N = A.length
@@ -82,11 +90,9 @@ function onClickHandler() {
     // Матрица собственных векторов
     var T = get1M(N)
 
-    console.log(T)
-
     var check = checkEnd(A, E, a[0], N)
 
-    while(!check && counter < 60000) {
+    while(!check && counter < 10000) {
         const ca = a[a.length - 1]
 
         
@@ -97,6 +103,7 @@ function onClickHandler() {
 
         // Если такой есть то анализируем
         if(src !== null) {
+            console.log('Анализируем:')
             const { p, q } = src
             const y = (A[p][q] - A[q][q]) / 2
             if(y == 0) {
@@ -107,11 +114,19 @@ function onClickHandler() {
             let s = x / (Math.sqrt(2 * (1 + Math.sqrt(1 - Math.pow(x,2)))))
             let c = Math.sqrt(1 - Math.pow(s,2))
             
+            console.log(`Y, X, S, C`, prettify([
+                [y],
+                [x],
+                [s],
+                [c]
+            ]))
+
+
             // Делаем преобразование
             for(let i = 0; i < N; i++) {
                 if(i !== p && i !== q) {
-                    let Z1 = A[i][p]
-                    let Z2 = A[i][q]
+                    const Z1 = A[i][p]
+                    const Z2 = A[i][q]
                     A[q][i] = Z1 * s + Z2 * c
                     A[i][q] = A[q][i]
                     A[i][p] = Z1 * c - Z2 * s
@@ -120,18 +135,18 @@ function onClickHandler() {
             }
             // Преобразуем матрицу T
             for(let i = 0; i < N; i++) {
-                let Z3 = T[i][p]
-                let Z4 = T[i][q]
+                const Z3 = T[i][p]
+                const Z4 = T[i][q]
                 T[i][q] = Z3 * s + Z4 * c
                 T[i][p] = Z3 * c - Z4 * s
             }
             // Добиваем оставшиеся элементы
-            let Z5 = s * s
-            let Z6 = c * c
-            let Z7 = s * c
-            let V1 = A[p][p]
-            let V2 = A[p][q]
-            let V3 = A[q][p]
+            const Z5 = s * s
+            const Z6 = c * c
+            const Z7 = s * c
+            const V1 = A[p][p]
+            const V2 = A[p][q]
+            const V3 = A[q][p]
             
             A[p][p] = (V1 * Z6) + (V3 * Z5) - (2 * V2 * Z7)
             A[q][q] = (V1 * Z5) + (V3 * Z6) + (2 * V2 * Z7)
@@ -140,9 +155,12 @@ function onClickHandler() {
             
 
             console.log(`Итераций сделано `, ++counter)
+            console.log(`Новая матрица А `, prettify(A))
+            console.log(`Новая матрица Т `, prettify(T))
         } else {
             // Если нет то рассчитываем новую преграду
             a.push(a[a.length - 1] / Math.pow(N,2))
+            console.log(`Новая преграда : `, a[a.length - 1].toFixed(3))
         }
         check = checkEnd(A, E, a[0], N)
     }
@@ -153,11 +171,36 @@ function onClickHandler() {
         L.push(A[i][i])
     }
     let Lsorted = L.sort().reverse().map(val => val.toFixed(5))
-    console.log(`Новая матрица А `, JSON.stringify(A))
-    console.log(`Новая матрица Т `, JSON.stringify(T))
+
     console.log('Ключевые элементы', Lsorted)
 
+    // Нормируем собственные вектора
+    const module = vector => Math.sqrt(vector.reduce((acc, val) => {
+        return +acc + Math.pow(val, 2) 
+    }, 0))
     
+    const norm = vector => {
+        const v = module(vector)
+        console.log(`Модуль вектора ${vector} : ${v}`)
+        return vector.map(val => {
+            return val / v
+        })
+    }
 
+    const Tnorm = T.map(norm)
 
+    console.log(`Матрица нагрузок на главные компоненты`, prettify(Tnorm))
+
+    // Вычисляем количество компонент
+    const allSum = Lsorted.map(parseFloat).reduce((acc, val) => {
+        return +acc + +val
+    }, 0)
+
+    const I = []
+    let partSum = 0
+    for(let i = 0; i < Lsorted.length; i++) {
+        partSum += +Lsorted[i]
+        I.push(partSum / allSum)
+    }
+    console.log(I)
 }
