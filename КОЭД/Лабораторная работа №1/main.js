@@ -72,6 +72,7 @@ function onClickHandler() {
         }
 
         // Считаем статистику для каждой пары столбцов
+        var flag = false
         const t = []
         for (let i = 0; i < N; i += 1) {
             t[i] = []
@@ -82,6 +83,7 @@ function onClickHandler() {
                 t[i][j] = stat
                 if(stat > stud && i !== j) {
                     returnResult(`Найдена корреляция между столбцами №${i} и №${j}, превышение табличного коэффициента на ${(((stat/stud) * 100) - 100).toFixed(2)}%`)
+                    flag = true
                 }
             }
         }
@@ -94,10 +96,10 @@ function onClickHandler() {
         console.log('Корреляционная матрица', R)
         console.log('Матрица статистик', t)
 
+        if(!flag) returnResult('Значимых корреляций не найдено')
 
-
-
-  
+        returnResult('Корреляционная матрица для следующего задания:')
+        returnResult(JSON.stringify(R))
 }
 
 // Таблица коэффициентов Стьюдента для различных степеней свободы при alpha = 0.05
