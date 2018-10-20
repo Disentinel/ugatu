@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Метод Монте-Карло</title>
+    <style>
+        table {
+            margin: 20px;
+            border-collapse: collapse;
+        }
+        td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        #wait {
+         text-align: center;
+         margin-top: 20%;   
+        }
+        p {
+            font-size: 18pt;
+            font-weight: bold;
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="wait">
+        <h1>Лабораторная работа №1</h1>
+        <h2>Компьютерное моделирование</h2>
+        <h3>Решетников В.Р., ПРО312сз</h3>
+        <h2 style="color: red">Загрузка займёт какое-то время, пожалуйста подождите...</h2>
+    </div>
+   
+    <canvas id="plot" width="1600" height="800"></canvas><br>
+    <p>
+        y = sin(x / c1) * c2, где с1 = [12.18], c2 = [18..22]
+    </p>
+    <script src="lab1.js"></script>
+</body>
+</html>

@@ -43,9 +43,11 @@ function onClickHandler() {
         for (let i = 0; i < N; i += 1) {
             COV[i] = []
             for (let j = 0; j < N; j += 1) {
-                COV[i][j] = M.reduce((acc, val) => {
-                    return +acc + ((val[i] - Mid[i]) * (val[j] - Mid[j]))
-                }, 0) / N
+                let sum = 0
+                for (let k = 0; k < N; k += 1) {
+                    sum += (M[k][i] - Mid[i]) * (M[k][j] * Mid[j])
+                }
+                COV[i][j] = sum / N
             }
         }
 
