@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>КОЭД ЛР3 ПРО412сз Решетников В.Р.</title>
+    <style>
+        textarea, button {
+            width: 100%;
+        }
+        button {
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div>Введите исходную матрицу в формате JSON</div>
+    <div>[[с,т,о,л,б,е,ц,1],[с,т,о,л,б,е,ц,2]]</div>>
+    <textarea rows="10" id='matrix'>[
+    [1.00, 0.42, 0.54, 0.66],
+    [0.42, 1.00, 0.32, 0.44],
+    [0.54, 0.32, 1.00, 0.22],
+    [0.66, 0.44, 0.22, 1.00]
+]</textarea>
+    <br><button id='go'>Расчет</button>
+    <script src="main2.js"></script>
+    <br><textarea rows="10" id='result'></textarea>
+</body>
+</html>
