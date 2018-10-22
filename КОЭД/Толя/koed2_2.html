@@ -1,0 +1,518 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Лаб 2</title>
+		
+		<style>
+			table, th, td{
+				border: 1px solid gray; 
+				padding: 5px;
+			}
+		</style>
+		
+    </head>
+	
+    <body>
+		<textarea id="input" cols = "70" rows = "15">
+			
+		</textarea>
+		<button onclick="initLab(); return false;">Посчитать</button>
+		<div id="output"></div>
+    </body>
+	
+	<script>
+	
+	window.onload = function(){
+		getInput().value = "";
+		appendText('Выполнил: Шевцов Анатолий, группа ПРО-311сз. Заочная форма обучения, ФИРТ.');
+		appendText('Номер в списке: 20; Вариант: 4');
+	};
+	
+	function getInput(){
+		return document.getElementById('input');
+	}
+	
+	function isValid(A_Array) { //Проверка входной матрицы на симметричность
+		for (let i = 0; i < A_Array.length; i++) {
+			for (let j = i + 1; j < A_Array.length; j++) {
+				if (A_Array[i][j] != A_Array[j][i]) {
+					result = false;
+				}
+			}
+		}
+		return true;
+	}
+
+	function getUnitMatrix(length){ //Вернуть новую единичную матрицу
+		let arr = [];
+		for (let i = 0; i < length; i++) {
+			arr[i] = [];
+			for (let j = 0; j < length; j++) {
+				if (i == j){
+					arr[i][j] = 1;
+				}else{
+					arr[i][j] = 0;
+				}
+			}
+		}
+		return arr;
+	}
+
+	function getZeroMatrix(length){
+		let arr = [];
+		for (let i = 0; i < length; i++) {
+			arr[i] = [];
+			for (let j = 0; j < length; j++) {
+				arr[i][j] = 0;
+			}
+		}
+		return arr;
+	}
+
+	function computeAlpha(A_Array){
+		let result = 0;
+		for (let i = 0; i < A_Array.length; i++) {
+			for (let j = i + 1; j < A_Array.length; j++) {
+				result = result + Math.pow(A_Array[i][j], 2);
+			}
+		}
+		result = Math.sqrt(2 * result);
+		return result;
+	}
+
+	function foundOutsideValue(A_Array){
+		let maxValue = 0;
+		let p = 0;
+		let q = 0;
+
+		for (let i = 0; i < A_Array.length; i++) {
+			for (let j = i + 1; j < A_Array.length; j++) {
+				if (Math.abs(A_Array[i][j]) > Math.abs(maxValue)) {
+					maxValue = A_Array[i][j];
+					p = i;
+					q = j;
+				}
+			}
+		}
+		return {p: p, q: q};
+	}
+
+	function copyFromTo(arrFrom, arrTo){
+		for (let i = 0; i < arrFrom.length; i++){
+			for (let j = 0; j < arrFrom.length; j++){
+				arrTo[i][j] = arrFrom[i][j];
+			}
+		}
+	}
+
+	function makeTurns(A_Array, T_Array, eps) {
+		let steps = 1;
+
+		let alpha = computeAlpha(A_Array);
+
+		while (alpha > eps) {
+
+			let maxOutside = foundOutsideValue(A_Array);
+			let p = maxOutside.p;
+			let q = maxOutside.q;
+
+			let turnMatrix = getUnitMatrix(A_Array.length);
+
+			if (A_Array[p][p] == A_Array[q][q]) {
+				turnMatrix[p][p] = turnMatrix[q][q] = turnMatrix[q][p] = Math.sqrt(2) / 2;
+				turnMatrix[p][q] = -1 * Math.sqrt(2) / 2;
+			} else {
+				let fi = 0.5 * Math.atan((2 * A_Array[p][q]) / (A_Array[p][p] - A_Array[q][q]));
+				turnMatrix[p][p] = turnMatrix[q][q] = Math.cos(fi);
+				turnMatrix[p][q] = -1 * Math.sin(fi);
+				turnMatrix[q][p] = Math.sin(fi);
+			}
+
+			let tempMatrix = getZeroMatrix(A_Array.length);
+
+			for (let i = 0; i < A_Array.length; i++) {
+				for (let j = 0; j < A_Array.length; j++) {
+					for (let k = 0; k < A_Array.length; k++) {
+						tempMatrix[i][j] = tempMatrix[i][j] + turnMatrix[k][i] * A_Array[k][j];
+					}
+				}
+			}
+
+			A_Array = getZeroMatrix(A_Array.length);
+
+			for (let i = 0; i < A_Array.length; i++) {
+				for (let j = 0; j < A_Array.length; j++) {
+					for (let k = 0; k < A_Array.length; k++) {
+						A_Array[i][j] = A_Array[i][j] + (tempMatrix[i][k] * turnMatrix[k][j]);
+					}
+				}
+			}
+
+			alpha = computeAlpha(A_Array);
+
+			tempMatrix = getZeroMatrix(A_Array.length);
+
+			for (let i = 0; i < A_Array.length; i++) {
+				for (let j = 0; j < A_Array.length; j++) {
+					for (let k = 0; k < A_Array.length; k++) {
+						tempMatrix[i][j] = tempMatrix[i][j] + T_Array[i][k] * turnMatrix[k][j];
+					}
+				}
+			}
+
+			copyFromTo(tempMatrix, T_Array);
+
+			steps++;
+		}
+		return {steps: steps, A_Array: A_Array, T_Array: T_Array};
+	}
+	
+	function bubbleSortExtended(T_Array, L_Array) {
+		let indexArray = [];
+		
+		for (let i = 0; i < L_Array.length; i++){
+			indexArray[i] = i;
+		}
+		
+		for (let i = 0; i < L_Array.length - 1; i++)
+		  {
+			for (let j = 1; j < (L_Array.length - 1); j++)
+			{
+			  if (L_Array[j] < L_Array[j + 1])
+			  {
+				let temp = L_Array[j];
+				L_Array[j] = L_Array[j + 1];
+				L_Array[j + 1] = temp;
+				
+				let tempIndex = indexArray[j];
+					indexArray[j] = indexArray[j + 1];
+					indexArray[j + 1] = tempIndex;
+			  }
+			}
+		  }
+		
+		let T_ArraySorted = [];
+		for (let i = 0; i < T_Array.length; i++){
+			T_ArraySorted[i] = [];
+		}
+		let nextIndex = 0;
+		for (let i = 0; i < L_Array.length; i++){
+			for (let j = 0; j < L_Array.length; j++){
+				if (nextIndex == indexArray[j]){
+					for (let k = 0; k < L_Array.length; k++){
+						T_ArraySorted[k][nextIndex] = T_Array[k][j];
+					}
+					nextIndex++;
+				}
+			}
+		}
+		return {T_Array:T_ArraySorted, L_Array: L_Array};
+	}
+	
+	function computeModule(vector){
+		let result = 0;
+		for (let i = 0; i < vector.length; i++){
+			result = result + Math.pow(vector[i], 2);
+		}
+		return Math.sqrt(result);
+	}
+	
+	function doNorm(vector){
+		let normArray = [];
+		for (let i = 0; i < vector.length; i++){
+			normArray
+			vector[i] / computeModule(vector[i]);
+		}
+	}
+	
+	function initLab(){
+		
+		// Вариант 20
+		
+		let A_Array = [];
+
+		let v = getInput().value;
+		let rowsString = v.split('\n');
+		for (let = i = 0; i < rowsString.length; i++){
+			A_Array[i] = [];
+			let colsString = rowsString[i].split(' ');
+			for (let j = 0; j < colsString.length; j++){
+				A_Array[i][j] = parseFloat(colsString[j]);
+			}
+		}
+		
+		
+		/*
+		for (let i = 0 ; i < 10; i++){
+			A_Array[i] = new Array();
+		}
+
+		A_Array[0][0] = 0.843;
+		A_Array[0][1] = 0.128;
+		A_Array[0][2] = 0.008;
+		A_Array[0][3] = -0.135;
+		A_Array[0][4] = 0.091;
+		A_Array[0][5] = -0.111;
+		A_Array[0][6] = -0.189;
+		A_Array[0][7] = 0.163;
+		A_Array[0][8] = -0.477;
+		A_Array[0][9] = -0.212;
+		
+		A_Array[1][0] = 0.128;
+		A_Array[1][1] = 0.690;
+		A_Array[1][2] = 0.043;
+		A_Array[1][3] = -0.188;
+		A_Array[1][4] = 0.001;
+		A_Array[1][5] = -0.001;
+		A_Array[1][6] = 0.141;
+		A_Array[1][7] = 0.033;
+		A_Array[1][8] = 0.210;
+		A_Array[1][9] = -0.134;
+		
+		A_Array[2][0] = 0.008;
+		A_Array[2][1] = 0.043;
+		A_Array[2][2] = 0.345;
+		A_Array[2][3] = -0.041;
+		A_Array[2][4] = -0.115;
+		A_Array[2][5] = 0.045;
+		A_Array[2][6] = -0.157;
+		A_Array[2][7] = 0.001;
+		A_Array[2][8] = -0.156;
+		A_Array[2][9] = 0.058;
+
+		A_Array[3][0] = -0.135;
+		A_Array[3][1] = -0.188;
+		A_Array[3][2] = -0.041;
+		A_Array[3][3] = 0.526;
+		A_Array[3][4] = 0.127;
+		A_Array[3][5] = -0.043;
+		A_Array[3][6] = 0.137;
+		A_Array[3][7] = -0.052;
+		A_Array[3][8] = -0.101;
+		A_Array[3][9] = -0.036;
+		
+		A_Array[4][0] = 0.091;
+		A_Array[4][1] = 0.001;
+		A_Array[4][2] = -0.115;
+		A_Array[4][3] = 0.127;
+		A_Array[4][4] = 0.292;
+		A_Array[4][5] = -0.141;
+		A_Array[4][6] = -0.055;
+		A_Array[4][7] = 0.083;
+		A_Array[4][8] = 0.075;
+		A_Array[4][9] = 0.185;
+		
+		A_Array[5][0] = -0.111;
+		A_Array[5][1] = -0.001;
+		A_Array[5][2] = 0.045;
+		A_Array[5][3] = -0.043;
+		A_Array[5][4] = -0.141;
+		A_Array[5][5] = 0.201;
+		A_Array[5][6] = -0.012;
+		A_Array[5][7] = -0.141;
+		A_Array[5][8] = -0.059;
+		A_Array[5][9] = -0.123;
+		
+		A_Array[6][0] = -0.189;
+		A_Array[6][1] = 0.141;
+		A_Array[6][2] = -0.157;
+		A_Array[6][3] = 0.137;
+		A_Array[6][4] = -0.055;
+		A_Array[6][5] = -0.012;
+		A_Array[6][6] = 0.488;
+		A_Array[6][7] = -0.173;
+		A_Array[6][8] = 0.113;
+		A_Array[6][9] = -0.387;
+		
+		A_Array[7][0] = 0.163;
+		A_Array[7][1] = 0.033;
+		A_Array[7][2] = 0.001;
+		A_Array[7][3] = -0.052;
+		A_Array[7][4] = 0.083;
+		A_Array[7][5] = -0.141;
+		A_Array[7][6] = -0.173;
+		A_Array[7][7] = 0.652;
+		A_Array[7][8] = 0.251;
+		A_Array[7][9] = 0.034;
+		
+		A_Array[8][0] = -0.477;
+		A_Array[8][1] = 0.210;
+		A_Array[8][2] = -0.156;
+		A_Array[8][3] = -0.101;
+		A_Array[8][4] = 0.075;
+		A_Array[8][5] = -0.059;
+		A_Array[8][6] = 0.113;
+		A_Array[8][7] = 0.251;
+		A_Array[8][8] = 0.907;
+		A_Array[8][9] = 0.095;
+		
+		A_Array[9][0] = -0.212;
+		A_Array[9][1] = -0.134;
+		A_Array[9][2] = 0.058;
+		A_Array[9][3] = -0.036;
+		A_Array[9][4] = 0.185;
+		A_Array[9][5] = -0.123;
+		A_Array[9][6] = -0.387;
+		A_Array[9][7] = 0.034;
+		A_Array[9][8] = 0.095;
+		A_Array[9][9] = 0.960;
+		*/
+		
+		
+		
+		/*
+		for (let i = 0 ; i < 4; i++){
+			A_Array[i] = new Array();
+		}
+
+		A_Array[0][0] = 1.00;
+		A_Array[0][1] = 0.42;
+		A_Array[0][2] = 0.54;
+		A_Array[0][3] = 0.66;
+
+		A_Array[1][0] = 0.42;
+		A_Array[1][1] = 1.00;
+		A_Array[1][2] = 0.32;
+		A_Array[1][3] = 0.44;
+
+		A_Array[2][0] = 0.54;
+		A_Array[2][1] = 0.32;
+		A_Array[2][2] = 1.00;
+		A_Array[2][3] = 0.22;
+
+		A_Array[3][0] = 0.66;
+		A_Array[3][1] = 0.44;
+		A_Array[3][2] = 0.22;
+		A_Array[3][3] = 1.00;
+		*/
+		
+		//
+		
+		appendText('Входные данные:');
+		showTable(A_Array, 3);
+		
+		let T_Array = getUnitMatrix(A_Array.length);
+
+
+		if (!isValid(A_Array)) {
+			appendText('Матрица не является симметричной');
+		}else{
+			let eps = 0.001;
+
+			let result = makeTurns(A_Array, T_Array, eps);
+			
+			let L_Array = [];
+			for (let i = 0; i < result.A_Array.length; i++){
+				L_Array[i] = [];
+				L_Array[i][0] = result.A_Array[i][i];
+			}
+			
+			let sortResult = bubbleSortExtended(T_Array, L_Array);
+			
+			T_Array = sortResult.T_Array;
+			L_Array = sortResult.L_Array;
+			
+			appendText('Таблица собственных векторов');
+			showTable(T_Array, 4);
+			
+			appendText('Собственные значения:');
+			showTable(L_Array, 4);
+			
+			appendText('Набор собственных векторов:');
+			for (let j = 0; j < T_Array.length; j++){
+				let tmp = '';
+				for (let i = 0; i < L_Array.length; i++){
+					tmp = tmp + (T_Array[i][j] < 0 ? '(' + T_Array[i][j] + ')' : T_Array[i][j]) + (i == (L_Array.length - 1) ? '' : ' + ');
+				}
+				appendText('y' + (j + 1) + ' = ' + tmp);
+			}
+			
+			appendText('Общее число шагов:' + result.steps);
+			
+			//Нормировка собственных векторов
+			
+			let modules = [];
+			for (let i = 0; i < T_Array.length; i++){
+				modules[i] = computeModule(T_Array[i]);
+			}
+			
+			let normArray = [];
+			for (let i = 0; i < T_Array.length; i++){
+				normArray[i] = [];
+			}
+			for (let i = 0; i < T_Array.length; i++){
+				for (let j = 0; j < T_Array.length; j++){
+					normArray[i][j] = T_Array[i][j] / modules[i];
+				}
+			}
+			
+			appendText('Матрица нагрузок на главные компоненты:');
+			showTable(normArray, 3);
+			
+			let lSum = 0;
+			for (let i = 0; i < L_Array.length; i++){
+				lSum = lSum + parseFloat(L_Array[i]);
+			}
+			
+			let pSum = 0;
+			let components = [];
+			for (let i = 0; i < L_Array.length; i++){
+				components[i] = [];
+			}
+			for (let i = 0; i < L_Array.length; i++){
+				pSum = pSum + parseFloat(L_Array[i]);
+				components[i][0] = (pSum / lSum);
+			}
+			appendText("Величина I(P'):");
+			showTable(components, 3);
+			
+			let minI = 2;
+			for (let i = 0; i < components.length; i++){
+				if ( (components[i] < minI) && (components[i] > 0.95) ){
+					minI = components[i];
+				}
+			}
+			if (minI == 2){
+				appendText("Минимальная величина I(P'), удовлетворяющая условию I(P') > 0.95 не найдена");
+			}else{
+				appendText("Минимальная величина I(P'), удовлетворяющая условию I(P') > 0.95: " + parseFloat(minI).toFixed(3));
+			}
+			
+			
+		}
+		
+	}
+	
+	function showTable(arr, toFixedValue){
+		let str = '';
+		let domNodeTable = '<table>'
+		for (let i = 0; i < arr.length; i++){
+			domNodeTable += '<tr>';
+			for (let j = 0; j < arr[i].length; j++){
+				domNodeTable += '<td>';
+				if (toFixedValue > 0){
+					domNodeTable += parseFloat(arr[i][j]).toFixed(toFixedValue);
+				}else{
+					domNodeTable += arr[i][j];
+				}
+				domNodeTable += '</td>';
+			}
+			domNodeTable += '</tr>';
+		}
+		getOutputer().innerHTML += domNodeTable;
+	}
+	
+	function getOutputer(){
+		return (document.getElementById('output'));
+	}
+	
+	function appendText(txt){
+		let outputer = getOutputer();
+		outputer.appendChild(document.createElement('br'));
+		let div = outputer.appendChild(document.createElement('div'));
+		div.appendChild(document.createTextNode(txt));
+	}
+	
+	</script>
+	
+</html>

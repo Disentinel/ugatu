@@ -1,0 +1,10 @@
+version: "2"
+
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:3.6.7-stretch
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"

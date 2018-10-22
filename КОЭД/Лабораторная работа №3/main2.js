@@ -70,7 +70,7 @@ function onClickHandler() {
     const N = A.length
 
     // Точность
-    const E = 0.95
+    const E = 0.0001
 
     // Вычисляем первую преграду
     let sum = 0

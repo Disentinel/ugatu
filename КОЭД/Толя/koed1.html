@@ -1,0 +1,490 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Лаб 1</title>
+		
+		<style>
+			table, th, td{
+				border: 1px solid gray; 
+				padding: 5px;
+			}
+		</style>
+		
+    </head>
+	
+    <body>
+		<textarea id="input" cols = "70" rows = "15">
+			
+		</textarea>
+		<button onclick="initLab(); return false;">Посчитать</button>
+		<div id="output"></div>
+    </body>
+	
+	<script>
+	
+	window.onload = function(){
+		getInput().value = "";
+		appendText('Выполнил: Шевцов Анатолий, группа ПРО-311сз. Заочная форма обучения, ФИРТ.');
+		appendText('Номер в списке: 20; Вариант: 4');
+	};
+	
+	function getInput(){
+		return document.getElementById('input');
+	}
+	
+	function initArray(){
+		
+		let arr = [];
+		let v = getInput().value;
+		let rowsString = v.split('\n');
+		for (let = i = 0; i < rowsString.length; i++){
+			arr[i] = [];
+			let colsString = rowsString[i].split(' ');
+			for (let j = 0; j < colsString.length; j++){
+				arr[i][j] = parseFloat(colsString[j]);
+			}
+		}
+		
+		/*
+		let arr = new Array();
+		
+		for (let i = 0 ; i < 3; i++){
+			arr[i] = new Array();
+		}
+		arr[0][0] = 16;
+		arr[0][1] = 14;
+		arr[0][2] = 12;
+		
+		arr[1][0] = 14;
+		arr[1][1] = 49;
+		arr[1][2] = 21;
+		
+		arr[2][0] = 12;
+		arr[2][1] = 21;
+		arr[2][2] = 36;
+		*/
+		
+		/*
+		for (let i = 0 ; i < 14; i++){
+			arr[i] = new Array();
+		}
+		arr[0][0] = 55;
+		arr[0][1] = 123;
+		arr[0][2] = 3.9;
+		arr[0][3] = 23;
+		arr[0][4] = 18;
+		arr[0][5] = 18;
+		arr[0][6] = 28;
+		arr[0][7] = 8.6;
+		arr[0][8] = 382;
+		arr[0][9] = 54;
+		
+		arr[1][0] = 40;
+		arr[1][1] = 150;
+		arr[1][2] = 4.1;
+		arr[1][3] = 31;
+		arr[1][4] = 20;
+		arr[1][5] = 18;
+		arr[1][6] = 22;
+		arr[1][7] = 8.1;
+		arr[1][8] = 440;
+		arr[1][9] = 84;
+		
+		arr[2][0] = 40;
+		arr[2][1] = 60;
+		arr[2][2] = 4.0;
+		arr[2][3] = 38;
+		arr[2][4] = 18;
+		arr[2][5] = 22;
+		arr[2][6] = 22;
+		arr[2][7] = 8.2;
+		arr[2][8] = 350;
+		arr[2][9] = 78;
+		
+		arr[3][0] = 60;
+		arr[3][1] = 90;
+		arr[3][2] = 3.9;
+		arr[3][3] = 31;
+		arr[3][4] = 19;
+		arr[3][5] = 20;
+		arr[3][6] = 20;
+		arr[3][7] = 8.45;
+		arr[3][8] = 351;
+		arr[3][9] = 60;
+		
+		arr[4][0] = 60;
+		arr[4][1] = 100;
+		arr[4][2] = 4.4;
+		arr[4][3] = 37;
+		arr[4][4] = 19;
+		arr[4][5] = 15;
+		arr[4][6] = 23;
+		arr[4][7] = 8.8;
+		arr[4][8] = 330;
+		arr[4][9] = 54;
+		
+		arr[5][0] = 53;
+		arr[5][1] = 85;
+		arr[5][2] = 4.2;
+		arr[5][3] = 30;
+		arr[5][4] = 20;
+		arr[5][5] = 12;
+		arr[5][6] = 18;
+		arr[5][7] = 8.3;
+		arr[5][8] = 310;
+		arr[5][9] = 96;
+		
+		arr[6][0] = 75;
+		arr[6][1] = 95;
+		arr[6][2] = 4.0;
+		arr[6][3] = 29;
+		arr[6][4] = 21;
+		arr[6][5] = 17;
+		arr[6][6] = 15;
+		arr[6][7] = 8.5;
+		arr[6][8] = 320;
+		arr[6][9] = 78;
+		
+		arr[7][0] = 50;
+		arr[7][1] = 70;
+		arr[7][2] = 4.1;
+		arr[7][3] = 26;
+		arr[7][4] = 19;
+		arr[7][5] = 11;
+		arr[7][6] = 18;
+		arr[7][7] = 8.5;
+		arr[7][8] = 409;
+		arr[7][9] = 84;
+		
+		arr[8][0] = 35;
+		arr[8][1] = 60;
+		arr[8][2] = 3.9;
+		arr[8][3] = 35;
+		arr[8][4] = 21;
+		arr[8][5] = 18;
+		arr[8][6] = 23;
+		arr[8][7] = 8.2;
+		arr[8][8] = 410;
+		arr[8][9] = 72;
+		
+		arr[9][0] = 50;
+		arr[9][1] = 90;
+		arr[9][2] = 4.0;
+		arr[9][3] = 34;
+		arr[9][4] = 19;
+		arr[9][5] = 20;
+		arr[9][6] = 27;
+		arr[9][7] = 5;
+		arr[9][8] = 310;
+		arr[9][9] = 66;
+		
+		arr[10][0] = 35;
+		arr[10][1] = 50;
+		arr[10][2] = 4.4;
+		arr[10][3] = 27;
+		arr[10][4] = 21;
+		arr[10][5] = 20;
+		arr[10][6] = 20;
+		arr[10][7] = 8.1;
+		arr[10][8] = 334;
+		arr[10][9] = 66;
+		
+		arr[11][0] = 50;
+		arr[11][1] = 110;
+		arr[11][2] = 4.0;
+		arr[11][3] = 27;
+		arr[11][4] = 15;
+		arr[11][5] = 18;
+		arr[11][6] = 16;
+		arr[11][7] = 8.4;
+		arr[11][8] = 325;
+		arr[11][9] = 72;
+		
+		arr[12][0] = 45;
+		arr[12][1] = 120;
+		arr[12][2] = 4.6;
+		arr[12][3] = 16;
+		arr[12][4] = 16;
+		arr[12][5] = 36;
+		arr[12][6] = 7;
+		arr[12][7] = 6.55;
+		arr[12][8] = 330;
+		arr[12][9] = 78;
+		
+		arr[13][0] = 48;
+		arr[13][1] = 75;
+		arr[13][2] = 4.8;
+		arr[13][3] = 21;
+		arr[13][4] = 15; //null;
+		arr[13][5] = 50;
+		arr[13][6] = 20;
+		arr[13][7] = 5.8;
+		arr[13][8] = 365;
+		arr[13][9] = 72;
+		*/
+		
+		return arr;
+	}
+
+	function consoleArray(arr){
+		let str = '';
+		for (let i = 0; i < arr.length; i++){
+			str = '';
+			for (let j = 0; j < arr[i].length; j++){
+				str += (arr[i][j] + ' ');
+			}
+			console.log(str);
+		}
+	}
+	
+	function showTable(arr, toFixedValue){
+		let str = '';
+		let domNodeTable = '<table>'
+		for (let i = 0; i < arr.length; i++){
+			domNodeTable += '<tr>';
+			for (let j = 0; j < arr[i].length; j++){
+				domNodeTable += '<td>';
+				if (toFixedValue > 0){
+					domNodeTable += parseFloat(arr[i][j]).toFixed(3);
+				}else{
+					domNodeTable += arr[i][j];
+				}
+				domNodeTable += '</td>';
+			}
+			domNodeTable += '</tr>';
+		}
+		getOutputer().innerHTML += domNodeTable;
+	}
+	
+	function getMidByCol(arr, i){
+		let buf = 0;
+		for (let k = 0; k < arr.length; k++){
+			buf += arr[k][i];
+		}
+		buf = buf / arr.length;
+		return buf;
+	}
+	
+	/*
+	function getMidByRow(arr, i){
+		let buf = 0;
+		for (let k = 0; k < arr[0].length; k++){
+			buf += arr[i][k];
+		}
+		buf = buf / arr[0].length;
+		return buf;
+	}
+	*/
+	
+	function getDispByCol(arr, j){
+		let buf = 0;
+		let tmp = 0;
+		for (let k = 0; k < arr.length; k++){
+			tmp = arr[k][j] - getMidByCol(arr, j);
+			tmp = Math.pow(tmp, 2);
+			buf += tmp;
+		}
+		buf = buf / arr.length; //-1 ?
+		//buf = Math.sqrt(buf);
+		return buf;
+	}
+	
+	function getElementStandartMatrix(arr, i, j){
+		let tmp1 = getMidByCol(arr, j);
+		let tmp2 = getDispByCol(arr, j);
+		return ((arr[i][j] - tmp1) / Math.sqrt(tmp2)); //((arr[i][j] - tmp1) / tmp2)
+	}
+	
+	function getStandartMatrix(arr){
+		let newArr = new Array();
+		for (let i = 0; i < arr.length; i++){
+			newArr[i] = new Array();
+			for (let j = 0; j < arr[i].length; j++){
+				newArr[i][j] = getElementStandartMatrix(arr, i, j);
+			}
+		}
+		return newArr;
+	}
+	
+	function getCopyArr(){
+		let newArr = new Array();
+		for (let i = 0; i < arr.length; i++){
+			newArr[i] = new Array();
+			for (let j = 0; j < arr[i].length; j++){
+				newArr[i][j] = arr[i][j];
+			}
+		}
+		return newArr;
+	}
+	
+	function getElementColetMatrix(arr, i, j){
+		let buf = 0;
+		for (let k = 0; k < arr.length; k++){
+			let tmp1 = getMidByCol(arr, i);
+			let tmp2 = getMidByCol(arr, j);
+			buf += ( (arr[k][i] - tmp1) * (arr[k][j] - tmp2) );
+		}
+		return (buf / arr.length);
+	}
+	
+	function getColetMatrix(arr){
+		let newArr = new Array();
+		for (let i = 0; i < arr[0].length; i++){
+			newArr[i] = new Array();
+			for (let j = 0; j < arr[i].length; j++){
+				newArr[i][j] = getElementColetMatrix(arr, i, j);
+			}
+		}
+		return newArr;
+	}
+	
+	function getElementCorrMatrix(arr, i, j){
+		let buf = 0;
+		for (let k = 0; k < arr[0].length; k++){
+			buf += arr[k][i] * arr[k][j];
+		}
+		return (buf / arr.length);
+	}
+	
+	function getCorrMatrix(arr){
+		let newArr = new Array();
+		for (let i = 0 ; i < arr[0].length; i++){
+			newArr[i] = new Array();
+			for (let j = 0; j < arr[i].length; j++){
+				newArr[i][j] = getElementCorrMatrix(arr, i, j);
+			}
+		}
+		return newArr;
+	}
+	
+	function getTKoefArray(){ // Таблица коэффициентов Стьюдента для различных степеней свободы при alpha = 0.05
+		let arr = [];
+		arr[0] = 12.706;
+		arr[1] = 4.302;
+		arr[2] = 3.182;
+		arr[3] = 2.776;
+		arr[4] = 5.706;
+		arr[5] = 2.446;
+		arr[6] = 3.646;
+		arr[7] = 3.060;
+		arr[8] = 2.622;
+		arr[9] = 2.281;
+		arr[10] = 2.201;
+		arr[11] = 1.778;
+		arr[12] = 1.604;
+		arr[13] = 1.448;
+		arr[14] = 1.314;
+		arr[15] = 2.119;
+		arr[16] = 1.098;
+		arr[17] = 1.009;
+		arr[18] = 0.930;
+		arr[19] = 0.860;
+		arr[20] = 2.079;
+		arr[21] = 0.739;
+		arr[22] = 0.684;
+		arr[23] = 0.639;
+		arr[24] = 0.595;
+		return arr;
+	}
+	
+	function initLab(){
+		
+		// Вариант 4
+		
+		//1 Составить программу для вычисления
+			//a) средних по столбцам, дисперсий по столбцам
+			//b) стандартизированной матрицы
+			//c) ковариационной матрицы
+			//d) корреляционной матрицы
+		//2 Проверить гипотезу о значимости коэффициентов корреляции между столбцами матрицы данных
+		
+		//1 Составить программу для вычисления
+			//a) средних по столбцам, дисперсий по столбцам
+		let sourceArr = initArray();
+		debugger;
+		console.log('Исходная матрица:');
+		appendText('Исходная матрица:');
+		consoleArray(sourceArr);
+		showTable(sourceArr, 0);
+		let tmp;
+		//средних по столбцам
+		for (let i = 0; i < sourceArr[0].length; i++){
+			console.log('Среднее столбца ' + (i+1) + ': ' + getMidByCol(sourceArr, i));
+			appendText('Среднее столбца ' + (i+1) + ': ' + getMidByCol(sourceArr, i));
+		}
+		//for (let i = 0; i < sourceArr.length; i++){
+		//	console.log('Среднее строки ' + (i+1) + ': ' + getMidByRow(sourceArr, i));
+		//}
+		//дисперсий по столбцам
+		for (let i = 0; i < sourceArr[0].length; i++){
+			console.log('Дисперсия столбца ' + (i+1) + ': ' + getDispByCol(sourceArr, i));
+			appendText('Дисперсия столбца ' + (i+1) + ': ' + getDispByCol(sourceArr, i));
+		}
+		//b) стандартизированной матрицы
+		let tmpArr = getStandartMatrix(sourceArr);
+		console.log('Стандартизированная матрица:');
+		appendText('Стандартизированная матрица:');
+		consoleArray(tmpArr);
+		showTable(tmpArr, 3);
+		//c) ковариационной матрицы
+		tmpArr = getColetMatrix(sourceArr);
+		console.log('Ковариационная матрица:');
+		appendText('Ковариационная матрица:');
+		consoleArray(tmpArr);
+		showTable(tmpArr, 3);
+		//d) корреляционной матрицы
+		tmpArr = getCorrMatrix(getStandartMatrix(sourceArr));
+		console.log('Корреляционная матрица:');
+		appendText('Корреляционная матрица:');
+		consoleArray(tmpArr);
+		showTable(tmpArr, 3);
+		
+		//2 Проверить гипотезу о значимости коэффициентов корреляции между столбцами матрицы данных
+		
+		let tKoefArray = getTKoefArray(); // Таблица коэффициентов Стьюдента для различных степеней свободы при alpha = 0.05 
+		appendText('Уровень значимости: 0.05');
+		// Считаем статистику для каждой пары столбцов
+		let f = tmpArr[0].length - 1; //Число степеней свободы
+		appendText('Число степеней свободы: ' + f);
+        let tStudentValue = tKoefArray[f - 1]; //Значение из таблицы значения t-критерия
+		appendText('Значение из таблицы значения t-критерия: ' + tStudentValue);
+		let foundedSignificant = false
+        let tStatArray = []
+        for (let i = 0; i < tmpArr.length; i += 1) {
+            tStatArray[i] = []
+            for (let j = 0; j < tmpArr[i].length; j += 1) {
+                tStatArray[i][j] = (tmpArr[i][j] * Math.sqrt(tmpArr[i].length - 2)) / Math.sqrt(1 - Math.pow(tmpArr[i][j], 2));
+                if(Math.abs(tStatArray[i][j]) >= tStudentValue) {
+					appendText('Имеется корреляция между табличным значением t-критерия (' + tStudentValue + ') и элементом таблицы корреляции [' + (i + 1) + '][' + (j + 1) + ']=' + tStatArray[i][j]);
+                    foundedSignificant = true
+                }
+            }
+        }
+		
+		console.log('Статистическая матрица:');
+		appendText('Статистическая матрица:');
+		consoleArray(tStatArray);
+		showTable(tStatArray, 3);
+		
+		if(foundedSignificant){
+			appendText('Выявлены значимые корреляции. Справедлива гипотеза H1.');
+		}else{
+			appendText('Значимых корреляций не выявлено. Справедлива гипотеза H0.');
+		}
+		
+	}
+	
+	function getOutputer(){
+		return (document.getElementById('output'));
+	}
+	
+	function appendText(txt){
+		let outputer = getOutputer();
+		outputer.appendChild(document.createElement('br'));
+		let div = outputer.appendChild(document.createElement('div'));
+		div.appendChild(document.createTextNode(txt));
+	}
+	
+	</script>
+	
+</html>
