@@ -1,7 +1,6 @@
 function randomExponential(rate) {
-    rate = rate || 1;
     return -Math.log(Math.random()) / rate;
-}
+    }
 
 function randomExpTime(min) {
     return randomExponential(1 / min)
@@ -13,10 +12,10 @@ let yearsMaxes = []
 for (let year = 0; year < 1000; year++) {
     let year = []
     for (let day = 0; day < 50; day++) {
-        const waterlevel = parseFloat(randomExpTime(12).toFixed(1))
+        const waterlevel = parseFloat(randomExponential(12).toFixed(1))
         year.push(+waterlevel)
     }
-    console.log(year)
+//    console.log(year)
     const max = Math.max(...year)
     yearsMaxes.push(max)
 }
@@ -54,10 +53,10 @@ var horizontalScale = getScale(10, absoluteMin, absoluteMax)
 
 const histo = getHisto(yearsMaxes, horizontalScale)
 
-console.log('Деления горизонтальной шкалы', horizontalScale)
+// console.log('Деления горизонтальной шкалы', horizontalScale)
 console.log('Гистограмма:', histo)
 
-const E = 0.01
+const E = 0.001
 var sum = 0
 var alpha = 0.95
 const iterMax = 200
@@ -75,13 +74,13 @@ var previousScale = getScale(2, horizontalScale[interval - 1].from, horizontalSc
 while (Math.abs(sum - alpha) > E && counter++ < iterMax) {
     
     const target = previousScale[1]
-    console.log(`previous scale`, previousScale)
+  //  console.log(`previous scale`, previousScale)
 
     const subHisto = getHisto(yearsMaxes, previousScale)
    
     
    // console.log(newScale)
-    console.log(subHisto)
+   // console.log(subHisto)
 
     previousScale = getScale(2, target.from, target.to)
 
@@ -91,11 +90,12 @@ while (Math.abs(sum - alpha) > E && counter++ < iterMax) {
     if(sum < alpha) {
         sum += subHisto[0]
     }
-    console.log('sum', sum)
+    // console.log('sum', sum)
     interval = 0
 }
 
-console.log(`Высота`, previousScale[0].to)
+const height = previousScale[0].to
+console.log(`Высота`, height)
 
 const N = horizontalScale.reduce((acc, val, idx) => {
     const middle = ((val.to - val.from) / 2) + val.from
@@ -103,5 +103,12 @@ const N = horizontalScale.reduce((acc, val, idx) => {
     return +acc + +value
 }, 0)
 
-console.log(N.toFixed(2))
+console.log(`Мат.ожидание`, N.toFixed(2))
 
+function getP(height, m2){ 
+    var e = 2.718281828459045; 
+    var result = Math.pow(e, -(Math.pow(e, (-(height - m2) / 12)))); 
+    return result
+}
+
+console.log(getP(height, Math.pow(N,2)) * 2.5)
