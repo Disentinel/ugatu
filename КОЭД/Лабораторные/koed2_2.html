@@ -1,32 +1,45 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Лаб 2</title>
+        <title>Решетников В.Р., КОЭД ЛР 3, ПРО 312сз</title>
 		
 		<style>
 			table, th, td{
 				border: 1px solid gray; 
 				padding: 5px;
+				border-collapse: collapse;
+			}
+			table {
+				width: 100%
+			}
+			textarea {
+				width: 100%
+			}
+			button {
+				width: 100%;
+				height: 150px;
 			}
 		</style>
 		
     </head>
 	
     <body>
-		<textarea id="input" cols = "70" rows = "15">
-			
-		</textarea>
+		<textarea id="input" cols = "70" rows = "15">0.843 0.128 0.060 -0.135 0.087 -0.111 -0.189 0.068 -0.477 -0.212
+0.128 0.690 0.020 -0.188 -0.003 -0.001 0.141 0.023 0.210 -0.134
+0.060 0.020 0.922 0.090 -0.027 -0.023 -0.263 -0.177 -0.286 0.481
+-0.135 -0.188 0.090 0.526 0.109 -0.043 0.137 -0.012 -0.101 -0.036
+0.087 -0.003 -0.027 0.109 0.320 -0.127 -0.093 0.099 0.072 0.212
+-0.111 -0.001 -0.023 -0.043 -0.127 0.201 -0.012 -0.128 -0.059 -0.123
+-0.189 0.141 -0.263 0.137 -0.093 -0.012 0.488 -0.148 0.113 -0.387
+0.068 0.023 -0.177 -0.012 0.099 -0.128 -0.148 0.507 0.277 0.113
+-0.477 0.210 -0.286 -0.101 0.072 -0.059 0.113 0.277 0.907 0.095
+-0.212 -0.134 0.481 -0.036 0.212 -0.123 -0.387 0.113 0.095 0.960</textarea>
 		<button onclick="initLab(); return false;">Посчитать</button>
 		<div id="output"></div>
     </body>
 	
 	<script>
-	
-	window.onload = function(){
-		getInput().value = "";
-		appendText('Выполнил: Шевцов Анатолий, группа ПРО-311сз. Заочная форма обучения, ФИРТ.');
-		appendText('Номер в списке: 20; Вариант: 4');
-	};
+
 	
 	function getInput(){
 		return document.getElementById('input');
@@ -397,7 +410,7 @@
 		if (!isValid(A_Array)) {
 			appendText('Матрица не является симметричной');
 		}else{
-			let eps = 0.001;
+			let eps = 0.0001;
 
 			let result = makeTurns(A_Array, T_Array, eps);
 			
@@ -422,7 +435,8 @@
 			for (let j = 0; j < T_Array.length; j++){
 				let tmp = '';
 				for (let i = 0; i < L_Array.length; i++){
-					tmp = tmp + (T_Array[i][j] < 0 ? '(' + T_Array[i][j] + ')' : T_Array[i][j]) + (i == (L_Array.length - 1) ? '' : ' + ');
+					
+					tmp = tmp + (T_Array[i][j] < 0 ? '(' + T_Array[i][j].toFixed(2) + ')' : T_Array[i][j].toFixed(2)) + (i == (L_Array.length - 1) ? '' : ' + ');
 				}
 				appendText('y' + (j + 1) + ' = ' + tmp);
 			}
