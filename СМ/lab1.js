@@ -49,11 +49,11 @@ function getHisto(values, scale) {
     })
 }
 
-var horizontalScale = getScale(10, absoluteMin, absoluteMax)
+var horizontalScale = getScale(8, absoluteMin, absoluteMax)
 
 const histo = getHisto(yearsMaxes, horizontalScale)
 
-// console.log('Деления горизонтальной шкалы', horizontalScale)
+console.log('Деления горизонтальной шкалы', horizontalScale)
 console.log('Гистограмма:', histo)
 
 const E = 0.001
