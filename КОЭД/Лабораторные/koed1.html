@@ -243,6 +243,24 @@
 		appendText('Стандартизированная матрица:');
 		consoleArray(tmpArr);
 		showTable(tmpArr, 3);
+
+		appendText('Средние по столбцам:')
+		//средних по столбцам
+		midString = '<table><tbody><tr>'
+		for (let i = 0; i < tmpArr[0].length; i++){
+			midString += `<td>${Math.abs(getMidByCol(tmpArr, i).toFixed(2))}</td>`
+		}
+		midString += '</tr></tbody></table>'
+		document.getElementById('output').innerHTML += midString
+	
+		appendText('Дисперсия по столбцам')
+		dispString = '<table><tr>'
+		for (let i = 0; i < tmpArr[0].length; i++){
+			dispString += `<td>${getDispByCol(tmpArr, i).toFixed(2)}</td>`
+		}
+		dispString += '</tr></table>'
+		document.getElementById('output').innerHTML += dispString
+
 		//c) ковариационной матрицы
 		tmpArr = getColetMatrix(sourceArr);
 		console.log('Ковариационная матрица:');
@@ -256,6 +274,23 @@
 		consoleArray(tmpArr);
 		showTable(tmpArr, 3);
 		
+		appendText('Средние по столбцам:')
+		//средних по столбцам
+		midString = '<table><tbody><tr>'
+		for (let i = 0; i < tmpArr[0].length; i++){
+			midString += `<td>${Math.abs(getMidByCol(tmpArr, i).toFixed(2))}</td>`
+		}
+		midString += '</tr></tbody></table>'
+		document.getElementById('output').innerHTML += midString
+	
+		appendText('Дисперсия по столбцам')
+		dispString = '<table><tr>'
+		for (let i = 0; i < tmpArr[0].length; i++){
+			dispString += `<td>${getDispByCol(tmpArr, i).toFixed(2)}</td>`
+		}
+		dispString += '</tr></table>'
+		document.getElementById('output').innerHTML += dispString
+
 		//2 Проверить гипотезу о значимости коэффициентов корреляции между столбцами матрицы данных
 		
 		let tKoefArray = getTKoefArray(); // Таблица коэффициентов Стьюдента для различных степеней свободы при alpha = 0.05 
@@ -285,6 +320,23 @@
 		consoleArray(tStatArray);
 		showTable(tStatArray, 3);
 		
+		appendText('Средние по столбцам:')
+		//средних по столбцам
+		midString = '<table><tbody><tr>'
+		for (let i = 0; i < tStatArray[0].length; i++){
+			midString += `<td>${Math.abs(getMidByCol(tStatArray, i).toFixed(2))}</td>`
+		}
+		midString += '</tr></tbody></table>'
+		document.getElementById('output').innerHTML += midString
+	
+		appendText('Дисперсия по столбцам')
+		dispString = '<table><tr>'
+		for (let i = 0; i < tStatArray[0].length; i++){
+			dispString += `<td>${getDispByCol(tStatArray, i).toFixed(2)}</td>`
+		}
+		dispString += '</tr></table>'
+		document.getElementById('output').innerHTML += dispString
+
 		if(foundedSignificant){
 			appendText('Выявлены значимые корреляции. Справедлива гипотеза H1.');
 		}else{
