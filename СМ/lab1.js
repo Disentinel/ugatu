@@ -6,13 +6,12 @@ function randomExpTime(min) {
     return randomExponential(1 / min)
 }
 
-// Вариант 12
 
 let yearsMaxes = []
 for (let year = 0; year < 1000; year++) {
     let year = []
     for (let day = 0; day < 50; day++) {
-        const waterlevel = parseFloat(randomExponential(12).toFixed(1))
+        const waterlevel = parseFloat(randomExponential(9).toFixed(1))
         year.push(+waterlevel)
     }
 //    console.log(year)
@@ -107,7 +106,7 @@ console.log(`Мат.ожидание`, N.toFixed(2))
 
 function getP(height, m2){ 
     var e = 2.718281828459045; 
-    var result = Math.pow(e, -(Math.pow(e, (-(height - m2) / 12)))); 
+    var result = Math.pow(e, -(Math.pow(e, (-(height - m2) / 6)))); 
     return result
 }
 
